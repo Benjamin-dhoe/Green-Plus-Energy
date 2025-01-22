@@ -294,5 +294,23 @@
             });
         });
 </script>
+<script>
+  function updateCheckboxState(event) {
+    const checkbox = event.target;
+    const targetDiv = checkbox.previousElementSibling;
+
+    if (checkbox.checked) {
+      targetDiv.classList.add('w--redirected-checked');
+    } else {
+      targetDiv.classList.remove('w--redirected-checked');
+    }
+  }
+
+  const checkboxes = document.querySelectorAll('.checkbox-or-radio-field input[type="checkbox"]');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updateCheckboxState);
+  });
+</script>
 </body>
 </html>
