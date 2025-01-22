@@ -294,31 +294,42 @@
             });
         });
 </script>
+<script>
+// Function to update the state of checkboxes and radio buttons
 function updateInputState(event) {
   const input = event.target;
   const targetDiv = input.previousElementSibling;
 
-  if (input.checked) {
-    targetDiv.classList.add('w--redirected-checked');
-
-    if (input.type === 'radio') {
-      const radioGroup = document.querySelectorAll(`input[name="${input.name}"]`);
-      radioGroup.forEach(radio => {
-        if (radio !== input) {
-          radio.previousElementSibling.classList.remove('w--redirected-checked');
-        }
-      });
+  // Check if the input is a radio button or checkbox
+  if (input.type === 'radio') {
+    // Handle radio buttons: add class to the checked one and remove it from others in the same group
+    const radioGroup = document.querySelectorAll(`input[name="${input.name}"]`);
+    radioGroup.forEach(radio => {
+      const radioDiv = radio.previousElementSibling;
+      if (radio.checked) {
+        radioDiv.classList.add('w--redirected-checked');
+      } else {
+        radioDiv.classList.remove('w--redirected-checked');
+      }
+    });
+  } else if (input.type === 'checkbox') {
+    // Handle checkboxes: toggle the class based on checked state
+    if (input.checked) {
+      targetDiv.classList.add('w--redirected-checked');
+    } else {
+      targetDiv.classList.remove('w--redirected-checked');
     }
-  } else {
-    targetDiv.classList.remove('w--redirected-checked');
   }
 }
 
+// Select all checkboxes and radio buttons
 const inputs = document.querySelectorAll('.checkbox-or-radio-field input[type="checkbox"], .checkbox-or-radio-field input[type="radio"]');
 
+// Attach event listeners to all matching inputs
 inputs.forEach(input => {
   input.addEventListener('change', updateInputState);
 });
+</script>
 
 </body>
 </html>
