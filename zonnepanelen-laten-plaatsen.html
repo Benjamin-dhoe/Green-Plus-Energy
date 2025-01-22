@@ -294,23 +294,31 @@
             });
         });
 </script>
-<script>
-  function updateCheckboxState(event) {
-    const checkbox = event.target;
-    const targetDiv = checkbox.previousElementSibling;
+function updateInputState(event) {
+  const input = event.target;
+  const targetDiv = input.previousElementSibling;
 
-    if (checkbox.checked) {
-      targetDiv.classList.add('w--redirected-checked');
-    } else {
-      targetDiv.classList.remove('w--redirected-checked');
+  if (input.checked) {
+    targetDiv.classList.add('w--redirected-checked');
+
+    if (input.type === 'radio') {
+      const radioGroup = document.querySelectorAll(`input[name="${input.name}"]`);
+      radioGroup.forEach(radio => {
+        if (radio !== input) {
+          radio.previousElementSibling.classList.remove('w--redirected-checked');
+        }
+      });
     }
+  } else {
+    targetDiv.classList.remove('w--redirected-checked');
   }
+}
 
-  const checkboxes = document.querySelectorAll('.checkbox-or-radio-field input[type="checkbox"]');
+const inputs = document.querySelectorAll('.checkbox-or-radio-field input[type="checkbox"], .checkbox-or-radio-field input[type="radio"]');
 
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', updateCheckboxState);
-  });
-</script>
+inputs.forEach(input => {
+  input.addEventListener('change', updateInputState);
+});
+
 </body>
 </html>
