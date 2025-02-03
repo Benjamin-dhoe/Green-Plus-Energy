@@ -469,6 +469,7 @@
   padding: 5vw;
   position: absolute;
   inset: auto auto 0% 0%;
+  box-shadow: 0 0 20px 10px rgb(0 0 0 / 57%);
 }
 
 .card.second {
@@ -1303,15 +1304,17 @@
 
 .layerdienst {
   opacity: 0;
-  background-color: #10713633;
-  border-radius: 20px;
-  align-items: center;
-  width: 300px;
-  padding: 20px;
-  transition: all .3s;
-  display: flex;
-  position: absolute;
-  inset: 0% 15% auto auto;
+    background-color: #10713633;
+    border-radius: 10px;
+    align-items: center;
+    width: 300px;
+    padding: 20px;
+    transition: all .3s;
+    display: flex;
+    position: absolute;
+    inset: 0% 15% auto auto;
+    box-shadow: 0 0 20px 10px rgb(0 0 0 / 57%);
+    border: 1px solid var(--dark-green);
 }
 
 .layerdienst.nr2 {
