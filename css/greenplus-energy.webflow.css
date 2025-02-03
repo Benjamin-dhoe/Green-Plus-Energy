@@ -506,6 +506,7 @@
   margin-bottom: 0;
   display: flex;
   position: relative;
+  box-shadow: none;
 }
 
 .horizontal-flex {
@@ -731,6 +732,8 @@
   padding: 1vw;
   text-decoration: none;
   position: relative;
+  box-shadow: 0 0 20px 10px rgb(0 0 0 / 57%);
+  border: 1px solid dimgrey;
 }
 
 .dienst-holder:hover {
