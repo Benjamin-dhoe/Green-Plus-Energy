@@ -534,14 +534,16 @@
 }
 
 .button {
-  color: var(--black);
-  text-transform: uppercase;
-  background-color: #fff;
-  background-image: linear-gradient(to right, #86c32659, #ccc 51%, #86c32659);
-  border-radius: 20px;
-  padding: 1vw 4vw;
-  font-weight: 400;
-  transition: background-color .3s ease-in;
+    color: var(--black);
+    text-transform: uppercase;
+    background-color: #fff;
+    background-image: linear-gradient(to right, #86c32659, #ccc 51%, #86c32659);
+    border-radius: 5px;
+    padding: 12px 40px;
+    font-weight: 400;
+    transition: background-color .3s ease-in;
+    box-shadow: 0 0 20px 10px rgb(0 0 0 / 57%);
+    border: 1px solid var(--green-light);
 }
 
 .button:hover {
