@@ -145,7 +145,7 @@
       </div>
       <div class="form-block">
         <form name="offerte-aanvraag" class="form" data-netlify="true">
-          <div class="holder-question"><label for="email-2" class="caps-small">Ik wil een offerte ontvangen voor</label><label class="w-checkbox checkbox-or-radio-field">
+          <div class="holder-question"><div class="caps-small">Ik wil een offerte ontvangen voor</div><label class="w-checkbox checkbox-or-radio-field">
               <div class="w-checkbox-input w-checkbox-input--inputType-custom radio-or-checkbox-btn"></div><input type="checkbox" name="Zonnepanelen" id="Zonnepanelen" data-name="Zonnepanelen" typeofferte="zonnepanelen" style="opacity:0;position:absolute;z-index:-1"><span class="radio-or-checkbox-lable w-form-label" for="Zonnepanelen">Zonnepanelen</span>
             </label><label class="w-checkbox checkbox-or-radio-field">
               <div class="w-checkbox-input w-checkbox-input--inputType-custom radio-or-checkbox-btn"></div><input type="checkbox" name="Laadpaal" id="Laadpaal" data-name="Laadpaal" typeofferte="laadpalen" style="opacity:0;position:absolute;z-index:-1"><span class="radio-or-checkbox-lable w-form-label" for="Laadpaal">Laadpalen</span>
@@ -160,7 +160,7 @@
               <div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-or-checkbox-btn w-radio-input"></div><input type="radio" name="Elektriciteitsmeter" id="Ik-weet-het-niet" data-name="Elektriciteitsmeter" style="opacity:0;position:absolute;z-index:-1" value="Ik weet het niet"><span class="radio-or-checkbox-lable w-form-label" for="Ik-weet-het-niet">Ik weet het niet</span>
             </label></div>
           <div class="holder-question"><label for="email-3" class="caps-small">Voeg een afbeelding van je meter toe (optioneel)</label>
-            <div id="filelarge" class="filelarge">Bestandsgrootte overschrijdt de maximale limiet van 4MB.</div><input class="invisible-textfield w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Example Text" role="uploadcare-uploader" type="text" id="image-uploader">
+            <div id="filelarge" class="filelarge">Bestandsgrootte overschrijdt de maximale limiet van 4MB.</div><input class="invisible-textfield w-input" maxlength="256" name="afbeelding meter" placeholder="Example Text" role="uploadcare-uploader" type="text" id="image-uploader">
           </div>
           <div class="holder-question"><label for="email-3" class="caps-small">Hoe oud is je woning?</label><label class="checkbox-or-radio-field w-radio">
               <div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-or-checkbox-btn w-radio-input"></div><input type="radio" name="LeeftijdWoning" id="Nieuwbouw" data-name="LeeftijdWoning" style="opacity:0;position:absolute;z-index:-1" value="Nieuwbouw"><span class="radio-or-checkbox-lable w-form-label" for="Nieuwbouw">Nieuwbouw</span>
@@ -172,22 +172,22 @@
           <div class="zonnepanelen">
             <div class="holder-question"><label for="Stroomverbruik" class="caps-small">Wat is je stroomverbruik?</label><input class="text-field w-input" maxlength="256" name="Stroomverbruik" data-name="Stroomverbruik" placeholder="Stroomverbruik" type="text" id="Stroomverbruik"></div>
             <div class="holder-question"><label for="email-3" class="caps-small">Type dak</label><label class="checkbox-or-radio-field w-radio">
-                <div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-or-checkbox-btn w-radio-input"></div><input type="radio" data-name="Radio 7" id="radio-7" name="radio" style="opacity:0;position:absolute;z-index:-1" value="Radio"><span class="radio-or-checkbox-lable w-form-label" for="radio-7">Zadeldak</span>
+                <div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-or-checkbox-btn w-radio-input"></div><input type="radio" name="dakbedekking" style="opacity:0;position:absolute;z-index:-1" value="Zadeldak"><span class="radio-or-checkbox-lable w-form-label" for="radio-7">Zadeldak</span>
               </label><label class="checkbox-or-radio-field w-radio">
-                <div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-or-checkbox-btn w-radio-input"></div><input type="radio" data-name="Radio 7" id="radio-7" name="radio" style="opacity:0;position:absolute;z-index:-1" value="Radio"><span class="radio-or-checkbox-lable w-form-label" for="radio-7">Platdak</span>
+                <div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-or-checkbox-btn w-radio-input"></div><input type="radio" name="dakbedekking" style="opacity:0;position:absolute;z-index:-1" value="Platdak"><span class="radio-or-checkbox-lable w-form-label" for="radio-7">Platdak</span>
               </label></div>
             <div class="holder-question"><label for="Dakbedekking" class="caps-small">Type dakbedekking</label><input class="text-field w-input" maxlength="256" name="Dakbedekking" data-name="Dakbedekking" placeholder="Dakbedekking" type="text" id="Dakbedekking"></div>
             <div class="holder-question"><label for="image-uploader-2" class="caps-small">Voeg een afbeelding van je dak toe (optioneel)</label>
-              <div id="filelarge2" class="filelarge">Bestandsgrootte overschrijdt de maximale limiet van 4MB.</div><input class="invisible-textfield w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Example Text" role="uploadcare-uploader" type="text" id="image-uploader-2">
+              <div id="filelarge2" class="filelarge">Bestandsgrootte overschrijdt de maximale limiet van 4MB.</div><input class="invisible-textfield w-input" maxlength="256" name="afbeelding dak" placeholder="Example Text" role="uploadcare-uploader" type="text" id="image-uploader-2">
             </div>
           </div>
           <div class="laadpalen">
             <div class="holder-question"><label for="Aantal-laadpalen" class="caps-small">Aantal te plaatsen laadpalen</label><input class="text-field w-input" maxlength="256" name="Aantal-laadpalen" data-name="Aantal laadpalen" placeholder="Aantal laadpalen" type="number" id="Aantal-laadpalen"></div>
           </div>
-          <div class="holder-question"><label for="field-3" class="caps-small">Voornaam + naam</label><input class="text-field w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Voornaam + naam" type="text" id="field-3" required=""></div>
+          <div class="holder-question"><label for="field-3" class="caps-small">Voornaam + naam</label><input class="text-field w-input" maxlength="256" name="voornaam-naam" placeholder="Voornaam + naam" type="text" id="field-3" required=""></div>
           <div class="holder-question"><label for="straat-2" class="caps-small">Straatnaam en huisnummer (optioneel)</label><input class="text-field w-input" maxlength="256" name="straat-2" data-name="Straat 2" placeholder="Straatnaam" type="text" id="straat-2"><label for="Gemeente-2" class="caps-small">Gemeente</label><input class="text-field w-input" maxlength="256" name="Gemeente-2" data-name="Gemeente 2" placeholder="Gemeente" type="text" id="Gemeente-2" required=""></div>
-          <div class="holder-question"><label for="email-2" class="caps-small">Email</label><input class="text-field w-input" maxlength="256" name="email-2" data-name="Email 2" placeholder="Straatnaam" type="email" id="email-2" required=""><label for="Telefoon-2" class="caps-small">Telefoonnummer (optioneel)</label><input class="text-field w-input" maxlength="256" name="Telefoon-2" data-name="Telefoon 2" placeholder="Telefoonnummer" type="tel" id="Telefoon-2"></div>
-          <div class="holder-question"><label for="field-2" class="caps-small">Bericht (optioneel)</label><textarea placeholder="Example Text" maxlength="5000" id="field-2" name="field-2" data-name="Field 2" class="text-field area2 w-input"></textarea></div><input type="submit" data-wait="Even geduld..." class="button w-button" value="Verzenden">
+          <div class="holder-question"><label for="email-2" class="caps-small">Email</label><input class="text-field w-input" maxlength="256" name="email" placeholder="email" type="email" id="email-2" required=""><label for="Telefoon-2" class="caps-small">Telefoonnummer (optioneel)</label><input class="text-field w-input" maxlength="256" name="Telefoon-2" data-name="Telefoon 2" placeholder="Telefoonnummer" type="tel" id="Telefoon-2"></div>
+          <div class="holder-question"><label for="field-2" class="caps-small">Bericht (optioneel)</label><textarea placeholder="Example Text" maxlength="5000" name="bericht" class="text-field area2 w-input"></textarea></div><input type="submit" data-wait="Even geduld..." class="button w-button" value="Verzenden">
         </form>
         <div class="w-form-done">
           <div>Thank you! Your submission has been received!</div>
