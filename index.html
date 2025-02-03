@@ -1,10 +1,10 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Oct 14 2024 07:12:44 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html>
 <html data-wf-page="6553e36ce0c08a595051f11a" data-wf-site="6553e36ce0c08a595051f117">
 <head>
   <meta charset="utf-8">
   <title>GreenPlus Energy</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <meta content="Webflow" name="generator">
+  <meta name="description" content="De toekomst is elektrisch. GreenPlus Energy versnelt deze transitie met de installatie van zonnepanelen, thuisbatterijen en laadpalen. Meer weten? Maak een afspraak voor professioneel advies op maat.">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
   <link href="css/greenplus-energy.webflow.css" rel="stylesheet" type="text/css">
@@ -385,7 +385,6 @@
   <script>
   var widget = uploadcare.Widget('#image-uploader');
 	const filetoolarge = document.getElementById("filelarge");
-  // Set the maximum file size (in bytes) here
   widget.validators.push(function(fileInfo) {
     if (fileInfo.size >= 4 * 1024 * 1024) {
      	filetoolarge.style.display = "block";
@@ -396,7 +395,6 @@
   });
   var widget2 = uploadcare.Widget('#image-uploader-2');
   const filetoolarge2 = document.getElementById("filelarge2");
-  // Set the maximum file size (in bytes) here
   widget2.validators.push(function(fileInfo) {
     if (fileInfo.size >= 4 * 1024 * 1024) {
      	filetoolarge2.style.display = "block";
@@ -421,25 +419,17 @@
 </script>
   <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Get all elements with class "link-icons"
     var linkIcons = document.querySelectorAll('.link-icons');
-    // Add event listeners to each element
     linkIcons.forEach(function (linkIcon) {
-        // Mouseover event
         linkIcon.addEventListener('mouseover', function () {
-            // Add the "hovered" class to the child element with class "icons"
             linkIcon.querySelector('.icons').classList.add('hovered');
-            // Make the sibling element with class "textdienst" visible
             var textdienst = linkIcon.nextElementSibling;
             if (textdienst && textdienst.classList.contains('textdienst')) {
                 textdienst.style.display = 'block';
             }
         });
-        // Mouseout event
         linkIcon.addEventListener('mouseout', function () {
-            // Remove the "hovered" class from the child element with class "icons"
             linkIcon.querySelector('.icons').classList.remove('hovered');
-            // Make the sibling element with class "textdienst" invisible
             var textdienst = linkIcon.nextElementSibling;
             if (textdienst && textdienst.classList.contains('textdienst')) {
                 textdienst.style.display = 'none';
@@ -461,8 +451,8 @@ function changeProgressBarWidth(duration) {
                 progressBar.style.width = (currentWidth += increment) + "%";
                 if (currentWidth >= 100) {
                     updateCardVisibility("plus");
-                    currentWidth = 0; // Reset progress bar width
-                    progressBar.style.width = "0%"; // Reset visual width
+                    currentWidth = 0;
+                    progressBar.style.width = "0%";
                 }
                 requestAnimationFrame(updateWidth);
           	}
@@ -550,7 +540,6 @@ changeProgressBarWidth(10);
     function inViewCallback(entries) {
       if (entries[0].isIntersecting) {
         showCard(0);
-        // changeProgressBarWidth(10);
       }
     }
     const observer = new IntersectionObserver(inViewCallback);
@@ -584,11 +573,10 @@ window.addEventListener('resize', runOnViewportWidthBiggerThan768);
         const mazeSectionTop = mazeSection.offsetTop;
         const mazeSectionHeight = mazeSection.offsetHeight;
         const scrollPercent = ((scrollPosition - mazeSectionTop) / mazeSectionHeight) * 100;
-        // Check if the scroll position is within the maze section
         if (scrollPercent >= 0 && scrollPercent <= 10) {
         	mazeHeading.style.display = "block";
           mazeHeading.style.opacity = 1;
-            const scaleValue = Math.min(scrollPercent / 20, 1); // Scale up to 1
+            const scaleValue = Math.min(scrollPercent / 20, 1);
             mazeHeading.style.transform = `scale(${1 + scaleValue})`;
         } else if (scrollPercent >= 50 && scrollPercent <= 90) {
             mazeHeading.style.opacity = 0;
