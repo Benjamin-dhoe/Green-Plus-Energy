@@ -13,6 +13,13 @@
   display: block;
 }
 
+.image-case {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
 .w-checkbox:before {
   content: " ";
   grid-area: 1 / 1 / 2 / 2;
