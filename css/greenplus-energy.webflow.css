@@ -21,6 +21,9 @@
     border-radius: 10px;
     box-shadow: 0 0 20px 10px rgb(0 0 0 / 57%);
     border: 1px solid var(--dark-green);
+  cursor: pointer;
+  width: 160px;
+  height: 160px;
 }
 
 .holder-case:hover {
@@ -45,8 +48,8 @@
 }
 
 .image-case {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   margin-bottom: 10px;
 }
