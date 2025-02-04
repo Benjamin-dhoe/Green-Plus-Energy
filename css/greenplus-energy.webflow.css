@@ -51,13 +51,8 @@
   height: 150px;
   border-radius: 10px;
   margin-bottom: 10px;
+  object-fit: cover;
 }
-
-.image-case img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-  }
 
 .w-checkbox:before {
   content: " ";
@@ -2118,6 +2113,10 @@
 @media screen and (max-width: 366px) {
   .holder-case {
     width: 100%;
+  }
+
+  .image-case {
+    height: 220px;
   }
 }
 
