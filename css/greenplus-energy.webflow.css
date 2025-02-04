@@ -7,6 +7,37 @@
   --black-2: black;
 }
 
+.holder-cases {
+  display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap:  10px;
+}
+
+.holder-case {
+    opacity: 0.8;
+    padding: 10px;
+    background-color: #222222;
+    border-radius: 10px;
+    box-shadow: 0 0 20px 10px rgb(0 0 0 / 57%);
+    border: 1px solid var(--dark-green);
+}
+
+.holder-case:hover {
+    opacity: 1;
+    border: 1px solid var(--green-light);
+}
+
+.small-text {
+  text-transform: uppercase;
+  opacity: 0.8;
+  font-size: 10px;
+}
+
+.text {
+  font-size: 14px;
+}
+
 .w-checkbox {
   margin-bottom: 5px;
   padding-left: 20px;
