@@ -20,6 +20,12 @@
   margin-bottom: 10px;
 }
 
+.image-case img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+  }
+
 .w-checkbox:before {
   content: " ";
   grid-area: 1 / 1 / 2 / 2;
