@@ -1530,7 +1530,7 @@
   }
 
   .card {
-    overflow: scroll;
+    overflow: auto;
   }
 
   .card.smiplevers {
