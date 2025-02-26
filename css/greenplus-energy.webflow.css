@@ -7,6 +7,12 @@
   --black-2: black;
 }
 
+.holderinputfield {
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 5px;
+}
+
 .holder-cases {
   display: flex;
     flex-direction: row;
