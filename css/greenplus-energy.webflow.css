@@ -7,6 +7,15 @@
   --black-2: black;
 }
 
+.error-melding {
+    background-color: #941818;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 4px 10px;
+    display: none;
+}
+
 .holderinputfield {
   width: 100%;
   max-width: 350px;
