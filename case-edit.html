@@ -76,6 +76,7 @@ const caseId = urlParams.get("id");
 const form = document.getElementById("edit-case-form");
 const existingImagesContainer = document.getElementById("existing-images");
 const uploadInput = document.getElementById("upload");
+const newImagesContainer = document.getElementById("new-images");
 const loadingPopup = document.getElementById("loadingPopup");
 
 let caseData = {};
@@ -112,11 +113,57 @@ async function loadCase() {
   loadingPopup.style.display = "none";
 }
 
+// Handle Image Preview Before Upload
+uploadInput.addEventListener("change", () => {
+  newImagesContainer.innerHTML = "";
+  uploadedImages = Array.from(uploadInput.files);
+
+  uploadedImages.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgElement = document.createElement("div");
+      imgElement.classList.add("uploaded-image");
+      imgElement.innerHTML = `
+        <img src="${e.target.result}" class="preview-image">
+        <button class="remove-btn" onclick="removeNewImage(${index})">X</button>
+      `;
+      newImagesContainer.appendChild(imgElement);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Reset input to allow re-uploading the same file
+  uploadInput.value = "";
+});
+
+// Remove New Image from Preview
+window.removeNewImage = (index) => {
+  uploadedImages.splice(index, 1);
+  renderNewImagePreview();
+};
+
+// Render Updated New Images Preview
+function renderNewImagePreview() {
+  newImagesContainer.innerHTML = "";
+  uploadedImages.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgElement = document.createElement("div");
+      imgElement.classList.add("uploaded-image");
+      imgElement.innerHTML = `
+        <img src="${e.target.result}" class="preview-image">
+        <button class="remove-btn" onclick="removeNewImage(${index})">X</button>
+      `;
+      newImagesContainer.appendChild(imgElement);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 window.deleteImage = async (index) => {
   if (!confirm("Weet je zeker dat je deze afbeelding wilt verwijderen?")) return;
 
   loadingPopup.style.display = "flex";
-
   const imageUrl = caseData.images[index];
   const imageRef = ref(storage, imageUrl);
   await deleteObject(imageRef);
@@ -147,7 +194,7 @@ form.addEventListener("submit", async (e) => {
 
   loadingPopup.style.display = "flex";
 
-  const newImages = await uploadImages(uploadInput.files);
+  const newImages = await uploadImages(uploadedImages);
 
   await updateDoc(doc(db, "Cases", caseId), {
     title: updatedTitle,
