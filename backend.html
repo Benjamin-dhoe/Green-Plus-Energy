@@ -14,13 +14,14 @@
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body class="body">
   <div class="section">
         <div class="contain-center paddabove">
               <h2 class="heading">Admin paneel</h2>
               <div style="margin-top: 10px;">
-                <a href="/" class="paswoord-forget" style="color: white;">Ga naar naar homepage website</a>
+                <a href="/" class="paswoord-forget" style="color: white;">Ga terug naar homepage website</a>
               </div>
               <div class="backendpart">
               <div class="headingandbutton">
@@ -76,23 +77,18 @@
           </form>
         </div>
       </div>
+      <div class="holder-logo-adminpages">
+        <img src="images/Logo-wit.png" loading="lazy" width="202" alt="">
+      </div>
       </div> 
-<div id="editPopup" class="popup">
-  <div class="popup-content">
-    <button class="close-button w-button" id="closePopup">&times;</button>
-    <h2>Edit Case</h2>
-    <form id="editCaseForm">
-      <label>Case Titel</label>
-      <input type="text" id="editTitle" name="editTitle">
-      <label>Locatie</label>
-      <input type="text" id="editLocation" name="editLocation">
-      <label>Datum</label>
-      <input type="text" id="editDatum" name="editDatum">
-      <label>Tekst</label>
-      <textarea id="editTekst" name="editTekst"></textarea>
-      <button type="submit">Update</button>
-    </form>
-  </div>
+<div id="loadingPopup" class="popup">
+  <lottie-player
+      src="/images/98742-loading-1.json"
+      background="transparent"
+      speed="1"
+      loop
+      autoplay>
+    </lottie-player>
 </div>
 <script src="/js/index.js" type="text/javascript"></script>
 <script type="module">
@@ -108,15 +104,14 @@ const casesCollection = collection(db, "Cases");
 const storage = getStorage();
 const tableBody = document.querySelector(".table-systeem tbody");
 const caseForm = document.getElementById("caseform");
-const editPopup = document.getElementById("editPopup");
-const editForm = document.getElementById("editCaseForm");
 const imageHolder = document.getElementById("holder-images");
 const uploadInput = document.getElementById("upload");
-let currentEditId = null;
+const loadingPopup = document.getElementById("loadingPopup");
 let uploadedImages = [];
 
 // Load Cases
 async function loadCases() {
+  loadingPopup.style.display ="flex";
   tableBody.innerHTML = "";
   const snapshot = await getDocs(casesCollection);
   snapshot.forEach(doc => {
@@ -129,12 +124,13 @@ async function loadCases() {
       <td class="td-systeem">
         <div class="holderactions">
           <a class="actionbtn" href="/case-edit/${doc.id}"><img src="/images/edit.svg"></a>
-          <div class="actionbtn onclick="deleteCase('${doc.id}')"><img src="/images/edit.svg"></div>
+          <div class="actionbtn onclick="deleteCase('${doc.id}')"><img src="/images/delete.svg"></div>
         </div>
       </td>
     `;
     tableBody.appendChild(row);
   });
+  loadingPopup.style.display ="none";
 }
 
 // Upload Images and Get URLs
@@ -163,25 +159,6 @@ caseForm.addEventListener("submit", async (e) => {
   loadCases();
 });
 
-// Open Edit Popup
-window.openEditPopup = (id, title, location, datum, images) => {
-  document.getElementById("editTitle").value = title;
-  document.getElementById("editLocation").value = location;
-  document.getElementById("editDatum").value = datum;
-  document.getElementById("editTekst").value = "";
-  currentEditId = id;
-  uploadedImages = images;
-
-  imageHolder.innerHTML = images.map((url, index) => `
-    <div class="image-preview">
-      <img src="${url}" width="100">
-      <button onclick="removeImage(${index})">X</button>
-    </div>
-  `).join("");
-
-  editPopup.style.display = "flex";
-};
-
 // Remove Image from the list
 window.removeImage = (index) => {
   uploadedImages.splice(index, 1);
@@ -193,35 +170,11 @@ window.removeImage = (index) => {
   );
 };
 
-// Edit Case
-editForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!currentEditId) return;
-
-  const title = editForm.editTitle.value;
-  const location = editForm.editLocation.value;
-  const datum = editForm.editDatum.value;
-  const tekst = editForm.editTekst.value;
-
-  // Upload new images and merge with existing ones
-  const newImages = await uploadImages(uploadInput.files);
-  const updatedImages = [...uploadedImages, ...newImages];
-
-  await updateDoc(doc(db, "Cases", currentEditId), { title, location, datum, tekst, images: updatedImages });
-  editPopup.style.display = "none";
-  loadCases();
-});
-
 // Delete Case
 window.deleteCase = async (id) => {
   await deleteDoc(doc(db, "Cases", id));
   loadCases();
 };
-
-// Close Edit Popup
-document.getElementById("closePopup").addEventListener("click", () => {
-  editPopup.style.display = "none";
-});
 
 // Load cases on page load
 loadCases();
