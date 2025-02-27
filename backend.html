@@ -71,7 +71,7 @@
             <div id="holder-images"></div>
             <div class="holderinputfield">
               <label for="upload" class="inputlabel upload">Afbeelding toevoegen</label>
-              <input type="file" accept="image/*" name="upload" id="upload">
+              <input type="file" accept="image/*" name="upload" id="upload" multiple>
             </div>
             <button class="button w-button">Case opslagen</button>
           </form>
@@ -82,13 +82,15 @@
       </div>
       </div> 
 <div id="loadingPopup" class="popup">
-  <lottie-player
-      src="/images/98742-loading-1.json"
-      background="transparent"
-      speed="1"
-      loop
-      autoplay>
-    </lottie-player>
+  <div style="width: 50px">
+    <lottie-player
+        src="/images/98742-loading-1.json"
+        background="transparent"
+        speed="1"
+        loop
+        autoplay>
+      </lottie-player>
+  </div>
 </div>
 <script src="/js/index.js" type="text/javascript"></script>
 <script type="module">
@@ -109,10 +111,11 @@ const uploadInput = document.getElementById("upload");
 const loadingPopup = document.getElementById("loadingPopup");
 let uploadedImages = [];
 
-// Load Cases
+// Load Cases from Firestore
 async function loadCases() {
-  loadingPopup.style.display ="flex";
+  loadingPopup.style.display = "flex";
   tableBody.innerHTML = "";
+
   const snapshot = await getDocs(casesCollection);
   snapshot.forEach(doc => {
     const data = doc.data();
@@ -124,13 +127,61 @@ async function loadCases() {
       <td class="td-systeem">
         <div class="holderactions">
           <a class="actionbtn" href="/case-edit/${doc.id}"><img src="/images/edit.svg"></a>
-          <div class="actionbtn onclick="deleteCase('${doc.id}')"><img src="/images/delete.svg"></div>
+          <div class="actionbtn" onclick="deleteCase('${doc.id}')"><img src="/images/delete.svg"></div>
         </div>
       </td>
     `;
     tableBody.appendChild(row);
   });
-  loadingPopup.style.display ="none";
+
+  loadingPopup.style.display = "none";
+}
+
+// Display Selected Images Before Upload
+uploadInput.addEventListener("change", () => {
+  const files = Array.from(uploadInput.files);
+
+  files.forEach((file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgElement = document.createElement("div");
+      imgElement.classList.add("uploaded-image");
+      imgElement.innerHTML = `
+        <img src="${e.target.result}" class="preview-image">
+        <button class="remove-btn" onclick="removeImage(${uploadedImages.length})">X</button>
+      `;
+      imageHolder.appendChild(imgElement);
+      uploadedImages.push(file);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Reset input to allow re-uploading the same file
+  uploadInput.value = "";
+});
+
+// Remove Image from List
+window.removeImage = (index) => {
+  uploadedImages.splice(index, 1);
+  renderImagePreview();
+};
+
+// Render Images in Holder
+function renderImagePreview() {
+  imageHolder.innerHTML = "";
+  uploadedImages.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgElement = document.createElement("div");
+      imgElement.classList.add("uploaded-image");
+      imgElement.innerHTML = `
+        <img src="${e.target.result}" class="preview-image">
+        <button class="remove-btn" onclick="removeImage(${index})">X</button>
+      `;
+      imageHolder.appendChild(imgElement);
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 // Upload Images and Get URLs
@@ -145,35 +196,57 @@ async function uploadImages(files) {
   return imageURLs;
 }
 
-// Add Case
+// Handle Case Submission
 caseForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const title = caseForm.title.value;
-  const location = caseForm.location.value;
-  const datum = caseForm.datum.value;
-  const tekst = caseForm.tekst.value;
-  const images = await uploadImages(uploadInput.files);
+  const title = caseForm.title.value.trim();
+  const location = caseForm.location.value.trim();
+  const datum = caseForm.datum.value.trim();
+  const tekst = caseForm.tekst.value.trim();
 
+  if (!title || !location || !datum || !tekst) {
+    alert("Vul alle velden in!");
+    return;
+  }
+
+  loadingPopup.style.display = "flex";
+
+  // Upload images and get URLs
+  const images = await uploadImages(uploadedImages);
+
+  // Save to Firestore
   await addDoc(casesCollection, { title, location, datum, tekst, images });
+
+  // Reset form & refresh
   caseForm.reset();
+  uploadedImages = [];
+  renderImagePreview();
   loadCases();
+  loadingPopup.style.display = "none";
 });
 
-// Remove Image from the list
-window.removeImage = (index) => {
-  uploadedImages.splice(index, 1);
-  openEditPopup(currentEditId, 
-    document.getElementById("editTitle").value, 
-    document.getElementById("editLocation").value, 
-    document.getElementById("editDatum").value, 
-    uploadedImages
-  );
-};
-
-// Delete Case
+// Delete Case from Firestore
 window.deleteCase = async (id) => {
-  await deleteDoc(doc(db, "Cases", id));
+  if (!confirm("Weet je zeker dat je deze case wilt verwijderen?")) return;
+
+  loadingPopup.style.display = "flex";
+  const docRef = doc(db, "Cases", id);
+  const caseDoc = await getDoc(docRef);
+  const caseData = caseDoc.data();
+
+  // Delete images from storage
+  if (caseData.images && caseData.images.length > 0) {
+    for (const imageUrl of caseData.images) {
+      const imageRef = ref(storage, imageUrl);
+      await deleteObject(imageRef);
+    }
+  }
+
+  // Delete case from Firestore
+  await deleteDoc(docRef);
+
   loadCases();
+  loadingPopup.style.display = "none";
 };
 
 // Load cases on page load
