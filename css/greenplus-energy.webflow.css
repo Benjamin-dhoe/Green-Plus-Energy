@@ -7,6 +7,51 @@
   --black-2: black;
 }
 
+.backendpart {
+    background-color: #fff;
+    border-radius: 10px;
+    flex-flow: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    padding: 20px;
+    display: flex;
+}
+
+.headingandbutton {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.scrollable {
+    overflow: auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.table-systeem {
+    width: 100%;
+    max-width: 100%;
+    overflow: scroll;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.th-systeem {
+    font-weight: 600;
+    padding: 10px;
+    border-bottom: 1px solid var(--dark-green);
+}
+
+.td-systeem {
+    padding: 15px;
+    font-size: 12px;
+    min-width: 120px;
+}
+
 .error-melding {
     background-color: #941818;
     color: white;
