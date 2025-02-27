@@ -207,11 +207,6 @@ caseForm.addEventListener("submit", async (e) => {
   const datum = caseForm.datum.value.trim();
   const tekst = caseForm.tekst.value.trim();
 
-  if (!title || !location || !datum || !tekst) {
-    alert("Vul alle velden in!");
-    return;
-  }
-
   loadingPopup.style.display = "flex";
 
   // Upload images and get URLs
