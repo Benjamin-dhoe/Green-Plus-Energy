@@ -19,12 +19,11 @@
 <body class="body">
   <div class="section">
     <div class="contain-center paddabove">
-      <h2 class="heading">Case Bewerken</h2>
       <div style="margin-top: 10px;">
         <a href="/admin" class="paswoord-forget" style="color: white;">Terug naar Admin Paneel</a>
       </div>
       <div class="backendpart">
-        <div class="heading" style="font-weight: 600">Wijzig Case</div>
+        <div class="heading" style="font-weight: 600">Case aanpassen</div>
         <div class="form-block w-form">
           <form class="form" id="edit-case-form">
             <div class="holderinputfield">
@@ -50,7 +49,6 @@
             </div>
             <div class="spacer"></div>
             <button type="submit" class="button w-button">Opslaan</button>
-            <button type="button" id="delete-case" class="button w-button" style="background-color: red;">Verwijder Case</button>
           </form>
         </div>
       </div>
@@ -79,12 +77,10 @@ const form = document.getElementById("edit-case-form");
 const existingImagesContainer = document.getElementById("existing-images");
 const uploadInput = document.getElementById("upload");
 const loadingPopup = document.getElementById("loadingPopup");
-const deleteCaseButton = document.getElementById("delete-case");
 
 let caseData = {};
 let uploadedImages = [];
 
-// Load case details
 async function loadCase() {
   loadingPopup.style.display = "flex";
   const docRef = doc(db, "Cases", caseId);
@@ -97,7 +93,6 @@ async function loadCase() {
     form.datum.value = caseData.datum;
     form.tekst.value = caseData.tekst || "";
 
-    // Display existing images
     existingImagesContainer.innerHTML = "";
     if (caseData.images && caseData.images.length > 0) {
       caseData.images.forEach((imageUrl, index) => {
@@ -117,7 +112,6 @@ async function loadCase() {
   loadingPopup.style.display = "none";
 }
 
-// Delete image from Firestore & Storage
 window.deleteImage = async (index) => {
   if (!confirm("Weet je zeker dat je deze afbeelding wilt verwijderen?")) return;
 
@@ -133,7 +127,6 @@ window.deleteImage = async (index) => {
   loadCase();
 };
 
-// Upload new images
 async function uploadImages(files) {
   const imageURLs = [];
   for (const file of files) {
@@ -145,7 +138,6 @@ async function uploadImages(files) {
   return imageURLs;
 }
 
-// Handle form submission (Update case)
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const updatedTitle = form.title.value.trim();
@@ -155,10 +147,8 @@ form.addEventListener("submit", async (e) => {
 
   loadingPopup.style.display = "flex";
 
-  // Upload new images if any
   const newImages = await uploadImages(uploadInput.files);
 
-  // Update Firestore document
   await updateDoc(doc(db, "Cases", caseId), {
     title: updatedTitle,
     location: updatedLocation,
@@ -171,26 +161,6 @@ form.addEventListener("submit", async (e) => {
   window.location.href = "/admin";
 });
 
-// Delete the entire case
-deleteCaseButton.addEventListener("click", async () => {
-  if (!confirm("Weet je zeker dat je deze case wilt verwijderen?")) return;
-
-  loadingPopup.style.display = "flex";
-
-  // Delete images from storage
-  for (const imageUrl of caseData.images) {
-    const imageRef = ref(storage, imageUrl);
-    await deleteObject(imageRef);
-  }
-
-  // Delete Firestore document
-  await deleteDoc(doc(db, "Cases", caseId));
-
-  alert("Case verwijderd!");
-  window.location.href = "/admin";
-});
-
-// Load case on page load
 loadCase();
 
 </script>
