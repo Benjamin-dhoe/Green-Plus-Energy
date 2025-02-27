@@ -70,11 +70,7 @@
             <div id="holder-images"></div>
             <div class="holderinputfield">
               <label for="upload" class="inputlabel upload">Afbeelding toevoegen</label>
-              <div class="inputfield upload">
-                <img src="/images/uploadicon.svg" loading="lazy" alt="" class="uploadicon">
-                <div class="undertitle">Upload</div>
-                <input type="file" accept="image/*" name="upload" id="upload" style="display: none;">
-              </div>
+              <input type="file" accept="image/*" name="upload" id="upload">
             </div>
             <button class="button w-button">Case opslagen</button>
           </form>
@@ -181,7 +177,7 @@ window.openEditPopup = (id, title, location, datum, images) => {
     </div>
   `).join("");
 
-  editPopup.style.display = "block";
+  editPopup.style.display = "flex";
 };
 
 // Remove Image from the list
