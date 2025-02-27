@@ -76,7 +76,6 @@ const caseId = urlParams.get("id");
 const form = document.getElementById("edit-case-form");
 const existingImagesContainer = document.getElementById("existing-images");
 const uploadInput = document.getElementById("upload");
-const newImagesContainer = document.getElementById("new-images");
 const loadingPopup = document.getElementById("loadingPopup");
 
 let caseData = {};
@@ -94,18 +93,7 @@ async function loadCase() {
     form.datum.value = caseData.datum;
     form.tekst.value = caseData.tekst || "";
 
-    existingImagesContainer.innerHTML = "";
-    if (caseData.images && caseData.images.length > 0) {
-      caseData.images.forEach((imageUrl, index) => {
-        const imgElement = document.createElement("div");
-        imgElement.classList.add("uploaded-image");
-        imgElement.innerHTML = `
-          <img src="${imageUrl}" class="preview-image">
-          <button class="remove-btn" onclick="deleteImage(${index})">X</button>
-        `;
-        existingImagesContainer.appendChild(imgElement);
-      });
-    }
+    renderImages();
   } else {
     alert("Case niet gevonden.");
     window.location.href = "/backend";
@@ -113,38 +101,22 @@ async function loadCase() {
   loadingPopup.style.display = "none";
 }
 
-// Handle Image Preview Before Upload
-uploadInput.addEventListener("change", () => {
-  newImagesContainer.innerHTML = "";
-  uploadedImages = Array.from(uploadInput.files);
+// Function to Render Existing & New Images
+function renderImages() {
+  existingImagesContainer.innerHTML = "";
 
-  uploadedImages.forEach((file, index) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imgElement = document.createElement("div");
-      imgElement.classList.add("uploaded-image");
-      imgElement.innerHTML = `
-        <img src="${e.target.result}" class="preview-image">
-        <button class="remove-btn" onclick="removeNewImage(${index})">X</button>
-      `;
-      newImagesContainer.appendChild(imgElement);
-    };
-    reader.readAsDataURL(file);
+  // Render existing images
+  caseData.images.forEach((imageUrl, index) => {
+    const imgElement = document.createElement("div");
+    imgElement.classList.add("uploaded-image");
+    imgElement.innerHTML = `
+      <img src="${imageUrl}" class="preview-image">
+      <button class="remove-btn" onclick="deleteImage(${index})">X</button>
+    `;
+    existingImagesContainer.appendChild(imgElement);
   });
 
-  // Reset input to allow re-uploading the same file
-  uploadInput.value = "";
-});
-
-// Remove New Image from Preview
-window.removeNewImage = (index) => {
-  uploadedImages.splice(index, 1);
-  renderNewImagePreview();
-};
-
-// Render Updated New Images Preview
-function renderNewImagePreview() {
-  newImagesContainer.innerHTML = "";
+  // Render newly selected images
   uploadedImages.forEach((file, index) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -154,12 +126,26 @@ function renderNewImagePreview() {
         <img src="${e.target.result}" class="preview-image">
         <button class="remove-btn" onclick="removeNewImage(${index})">X</button>
       `;
-      newImagesContainer.appendChild(imgElement);
+      existingImagesContainer.appendChild(imgElement);
     };
     reader.readAsDataURL(file);
   });
 }
 
+// Handle Image Selection and Preview
+uploadInput.addEventListener("change", () => {
+  uploadedImages = Array.from(uploadInput.files);
+  renderImages();
+  uploadInput.value = ""; // Reset input so user can select the same file again if needed
+});
+
+// Remove New Image from Preview
+window.removeNewImage = (index) => {
+  uploadedImages.splice(index, 1);
+  renderImages();
+};
+
+// Delete Image from Firebase Storage & Firestore
 window.deleteImage = async (index) => {
   if (!confirm("Weet je zeker dat je deze afbeelding wilt verwijderen?")) return;
 
@@ -171,9 +157,11 @@ window.deleteImage = async (index) => {
   caseData.images.splice(index, 1);
   await updateDoc(doc(db, "Cases", caseId), { images: caseData.images });
 
-  loadCase();
+  renderImages();
+  loadingPopup.style.display = "none";
 };
 
+// Upload Images to Firebase Storage
 async function uploadImages(files) {
   const imageURLs = [];
   for (const file of files) {
@@ -185,6 +173,7 @@ async function uploadImages(files) {
   return imageURLs;
 }
 
+// Submit Form & Update Firestore
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const updatedTitle = form.title.value.trim();
@@ -209,6 +198,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 loadCase();
+
 
 </script>
 </body>
