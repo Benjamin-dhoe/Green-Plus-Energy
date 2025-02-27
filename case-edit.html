@@ -150,16 +150,28 @@ window.deleteImage = async (index) => {
   if (!confirm("Weet je zeker dat je deze afbeelding wilt verwijderen?")) return;
 
   loadingPopup.style.display = "flex";
-  const imageUrl = caseData.images[index];
-  const imageRef = ref(storage, imageUrl);
-  await deleteObject(imageRef);
 
-  caseData.images.splice(index, 1);
-  await updateDoc(doc(db, "Cases", caseId), { images: caseData.images });
+  try {
+    const imageUrl = caseData.images[index];
+    const imageRef = ref(storage, imageUrl);
+    await deleteObject(imageRef); // Delete from Firebase Storage
 
-  renderImages();
+    caseData.images.splice(index, 1); // Remove from local array
+
+    // Update Firestore document with new images array
+    await updateDoc(doc(db, "Cases", caseId), {
+      images: [...caseData.images] // Ensure the updated array is stored
+    });
+
+    renderImages(); // Refresh UI
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    alert("Fout bij het verwijderen van de afbeelding.");
+  }
+
   loadingPopup.style.display = "none";
 };
+
 
 // Upload Images to Firebase Storage
 async function uploadImages(files) {
