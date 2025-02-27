@@ -222,6 +222,8 @@
     border: 1px solid var(--dark-green);
   cursor: pointer;
   width: 180px;
+  color: white;
+  text-decoration: none;
 }
 
 .holder-case:hover {
