@@ -22,7 +22,7 @@
               <div class="backendpart">
               <div class="headingandbutton">
                 <div class="heading nopad">Cases</div>
-                <a href="#newvacancy" class="button w-button">Case toevoegen</a>
+                <a href="#newcase" class="button w-button">Case toevoegen</a>
               </div>
               <div class="scrollable">
               <table class="table-systeem">
@@ -39,14 +39,151 @@
                 </tbody>
               </table>
             </div>
-              <a href="#newvacancy" class="buttonadd w-inline-block">
+              <a href="#newcase" class="buttonadd w-inline-block">
                 <div class="plussign">+</div>
                 <div>case toevoegen</div>
               </a>
             </div>
         </div>
+    <div id="newcase" class="backendwhitepart">
+        <div class="form-block w-form">
+          <form class="form" id="caseform">
+            <div class="holderinputfield">
+              <label for="title" class="inputlabel">Case titel</label>
+              <input class="inputfield w-input" maxlength="256" name="title" placeholder="" type="text">
+            </div>
+            <div class="holderinputfield">
+                <label for="location" class="inputlabel">Locatie</label>
+                <input class="inputfield withnumber w-input" maxlength="256" name="location" placeholder="" type="text">
+            </div>
+            <div class="holderinputfield">
+                <label for="datum" class="inputlabel">Datum</label>
+                <input class="inputfield withnumber w-input" maxlength="256" name="datum" placeholder="" type="text">
+            </div>
+            <div class="holderinputfield">
+              <label for="description" class="inputlabel">Tekst</label>
+              <textarea placeholder="" name="tekst" class="inputfield area w-input"></textarea>
+            </div>
+            <div id="holder-images"></div>
+            <div class="holderinputfield">
+              <label for="upload" class="inputlabel upload">Afbeelding toevoegen</label>
+              <div class="inputfield upload">
+                <img src="/images/uploadicon.svg" loading="lazy" alt="" class="uploadicon">
+                <div class="undertitle">Upload</div>
+                <input type="file" accept="image/*" name="upload" id="upload" style="display: none;">
+              </div>
+            </div>
+            <button class="button w-button">Case opslagen</button>
+          </form>
+        </div>
+      </div>
       </div> 
-
+<div id="editPopup" class="popup">
+  <div class="popup-content">
+    <button class="close-button w-button" id="closePopup">&times;</button>
+    <h2>Edit Case</h2>
+    <form id="editCaseForm">
+      <label>Case Titel</label>
+      <input type="text" id="editTitle" name="editTitle">
+      <label>Locatie</label>
+      <input type="text" id="editLocation" name="editLocation">
+      <label>Datum</label>
+      <input type="text" id="editDatum" name="editDatum">
+      <label>Tekst</label>
+      <textarea id="editTekst" name="editTekst"></textarea>
+      <button type="submit">Update</button>
+    </form>
+  </div>
+</div>
 <script src="/js/index.js" type="text/javascript"></script>
+<script type="module">
+import { db } from "/js/firebase.js";
+import { 
+  collection, getDocs, addDoc, updateDoc, deleteDoc, doc 
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+import { 
+  getStorage, ref, uploadBytes, getDownloadURL 
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
+
+const casesCollection = collection(db, "Cases");
+const storage = getStorage();
+const tableBody = document.querySelector(".table-systeem tbody");
+const caseForm = document.getElementById("caseform");
+const editPopup = document.getElementById("editPopup");
+const editForm = document.getElementById("editCaseForm");
+let currentEditId = null;
+
+// Fetch and display cases
+async function loadCases() {
+  tableBody.innerHTML = "";
+  const snapshot = await getDocs(casesCollection);
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${data.title}</td>
+      <td>${data.location}</td>
+      <td>${data.datum}</td>
+      <td>
+        <button class="edit-btn" data-id="${doc.id}" onclick="openEditPopup('${doc.id}', '${data.title}', '${data.location}', '${data.datum}', '${data.tekst}')">Edit</button>
+        <button class="delete-btn" data-id="${doc.id}" onclick="deleteCase('${doc.id}')">Delete</button>
+      </td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+// Add case
+caseForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = caseForm.title.value;
+  const location = caseForm.location.value;
+  const datum = caseForm.datum.value;
+  const tekst = caseForm.tekst.value;
+  
+  await addDoc(casesCollection, { title, location, datum, tekst });
+  caseForm.reset();
+  loadCases();
+});
+
+// Open edit popup
+window.openEditPopup = (id, title, location, datum, tekst) => {
+  document.getElementById("editTitle").value = title;
+  document.getElementById("editLocation").value = location;
+  document.getElementById("editDatum").value = datum;
+  document.getElementById("editTekst").value = tekst;
+  currentEditId = id;
+  editPopup.style.display = "block";
+};
+
+// Edit case
+editForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentEditId) return;
+  
+  const title = editForm.editTitle.value;
+  const location = editForm.editLocation.value;
+  const datum = editForm.editDatum.value;
+  const tekst = editForm.editTekst.value;
+  
+  await updateDoc(doc(db, "Cases", currentEditId), { title, location, datum, tekst });
+  editPopup.style.display = "none";
+  loadCases();
+});
+
+// Delete case
+window.deleteCase = async (id) => {
+  await deleteDoc(doc(db, "Cases", id));
+  loadCases();
+};
+
+// Close edit popup
+document.getElementById("closePopup").addEventListener("click", () => {
+  editPopup.style.display = "none";
+});
+
+// Load cases on page load
+loadCases();
+</script>
 </body>
 </html>
