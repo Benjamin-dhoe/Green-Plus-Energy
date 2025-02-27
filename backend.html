@@ -50,6 +50,7 @@
             </div>
         </div>
     <div id="newcase" class="backendpart">
+        <div class="heading" style="font-weight: 600">Case toevoegen</div>
         <div class="form-block w-form">
           <form class="form" id="caseform">
             <div class="holderinputfield">
@@ -73,6 +74,8 @@
               <label for="upload" class="inputlabel upload">Afbeelding toevoegen</label>
               <input type="file" accept="image/*" name="upload" id="upload" multiple>
             </div>
+            <div class="spacer"></div>
+            <div class="spacer"></div>
             <button class="button w-button">Case opslagen</button>
           </form>
         </div>
@@ -126,7 +129,7 @@ async function loadCases() {
       <td class="td-systeem">${data.datum}</td>
       <td class="td-systeem">
         <div class="holderactions">
-          <a class="actionbtn" href="/case-edit/${doc.id}"><img src="/images/edit.svg"></a>
+          <a class="actionbtn" href="/case-edit?id=${doc.id}"><img src="/images/edit.svg"></a>
           <div class="actionbtn" onclick="deleteCase('${doc.id}')"><img src="/images/delete.svg"></div>
         </div>
       </td>
