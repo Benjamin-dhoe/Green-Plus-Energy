@@ -127,10 +127,10 @@ async function loadCases() {
     const data = doc.data();
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${data.title}</td>
-      <td>${data.location}</td>
-      <td>${data.datum}</td>
-      <td>
+      <td class="td-systeem">${data.title}</td>
+      <td class="td-systeem">${data.location}</td>
+      <td class="td-systeem">${data.datum}</td>
+      <td class="td-systeem">
         <button class="edit-btn" onclick="openEditPopup('${doc.id}', '${data.title}', '${data.location}', '${data.datum}', ${JSON.stringify(data.images || [])})">Edit</button>
         <button class="delete-btn" onclick="deleteCase('${doc.id}')">Delete</button>
       </td>
