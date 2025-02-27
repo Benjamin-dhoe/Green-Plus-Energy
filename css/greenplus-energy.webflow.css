@@ -52,6 +52,27 @@
     min-width: 120px;
 }
 
+.buttonadd {
+    color: var(--dark-green);
+    justify-content: flex-start;
+    align-items: center;
+    font-family: gelica, sans-serif;
+    text-decoration: none;
+    display: flex;
+    margin-top: 20px;
+}
+
+.plussign {
+    background-color: var(--dark-green);
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    display: flex;
+}
+
 .error-melding {
     background-color: #941818;
     color: white;
