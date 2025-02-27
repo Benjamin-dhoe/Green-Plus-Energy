@@ -45,16 +45,6 @@
       <div class="contain-center">
         <h1 class="heading">Cases</h1>
         <div class="holder-cases" id="holdercases">
-          <a class="holder-case">
-            <img class="image-case" src="/images/20231015_114210447_iOS.jpg">
-            <div class="small-text">Aalst</div>
-            <div class="text">Plaatsing van laadpaal</div>
-          </a>
-	  <a class="holder-case">
-            <img class="image-case" src="/images/20240810_141903854_iOS.jpg">
-            <div class="small-text">Antwerpen</div>
-            <div class="text">Project PV-panelen batterij</div>
-          </a>	
         </div>
       </div>
     </div>
@@ -130,6 +120,7 @@ async function loadCases() {
     if (data.images && data.images.length > 0) {
       const caseElement = document.createElement("a");
       caseElement.classList.add("holder-case");
+	caseElement.href = `/case/${doc.id}`;
 
       const imageElement = document.createElement("img");
       imageElement.classList.add("image-case");
