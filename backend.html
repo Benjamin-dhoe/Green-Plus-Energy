@@ -19,9 +19,12 @@
   <div class="section">
         <div class="contain-center paddabove">
               <h2 class="heading">Admin paneel</h2>
+              <div style="margin-top: 10px;">
+                <a href="/" class="paswoord-forget" style="color: white;">Ga naar naar homepage website</a>
+              </div>
               <div class="backendpart">
               <div class="headingandbutton">
-                <div class="heading nopad">Cases</div>
+                <div class="heading" style="font-weight: 600">Cases</div>
                 <a href="#newcase" class="button w-button">Case toevoegen</a>
               </div>
               <div class="scrollable">
@@ -102,7 +105,7 @@ import {
   collection, getDocs, addDoc, updateDoc, deleteDoc, doc 
 } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 import { 
-  getStorage, ref, uploadBytes, getDownloadURL 
+  getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
 } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
 
 const casesCollection = collection(db, "Cases");
@@ -111,9 +114,12 @@ const tableBody = document.querySelector(".table-systeem tbody");
 const caseForm = document.getElementById("caseform");
 const editPopup = document.getElementById("editPopup");
 const editForm = document.getElementById("editCaseForm");
+const imageHolder = document.getElementById("holder-images");
+const uploadInput = document.getElementById("upload");
 let currentEditId = null;
+let uploadedImages = [];
 
-// Fetch and display cases
+// Load Cases
 async function loadCases() {
   tableBody.innerHTML = "";
   const snapshot = await getDocs(casesCollection);
@@ -125,59 +131,96 @@ async function loadCases() {
       <td>${data.location}</td>
       <td>${data.datum}</td>
       <td>
-        <button class="edit-btn" data-id="${doc.id}" onclick="openEditPopup('${doc.id}', '${data.title}', '${data.location}', '${data.datum}', '${data.tekst}')">Edit</button>
-        <button class="delete-btn" data-id="${doc.id}" onclick="deleteCase('${doc.id}')">Delete</button>
+        <button class="edit-btn" onclick="openEditPopup('${doc.id}', '${data.title}', '${data.location}', '${data.datum}', ${JSON.stringify(data.images || [])})">Edit</button>
+        <button class="delete-btn" onclick="deleteCase('${doc.id}')">Delete</button>
       </td>
     `;
     tableBody.appendChild(row);
   });
 }
 
-// Add case
+// Upload Images and Get URLs
+async function uploadImages(files) {
+  const imageURLs = [];
+  for (const file of files) {
+    const storageRef = ref(storage, `cases/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    imageURLs.push(url);
+  }
+  return imageURLs;
+}
+
+// Add Case
 caseForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = caseForm.title.value;
   const location = caseForm.location.value;
   const datum = caseForm.datum.value;
   const tekst = caseForm.tekst.value;
-  
-  await addDoc(casesCollection, { title, location, datum, tekst });
+  const images = await uploadImages(uploadInput.files);
+
+  await addDoc(casesCollection, { title, location, datum, tekst, images });
   caseForm.reset();
   loadCases();
 });
 
-// Open edit popup
-window.openEditPopup = (id, title, location, datum, tekst) => {
+// Open Edit Popup
+window.openEditPopup = (id, title, location, datum, images) => {
   document.getElementById("editTitle").value = title;
   document.getElementById("editLocation").value = location;
   document.getElementById("editDatum").value = datum;
-  document.getElementById("editTekst").value = tekst;
+  document.getElementById("editTekst").value = "";
   currentEditId = id;
+  uploadedImages = images;
+
+  imageHolder.innerHTML = images.map((url, index) => `
+    <div class="image-preview">
+      <img src="${url}" width="100">
+      <button onclick="removeImage(${index})">X</button>
+    </div>
+  `).join("");
+
   editPopup.style.display = "block";
 };
 
-// Edit case
+// Remove Image from the list
+window.removeImage = (index) => {
+  uploadedImages.splice(index, 1);
+  openEditPopup(currentEditId, 
+    document.getElementById("editTitle").value, 
+    document.getElementById("editLocation").value, 
+    document.getElementById("editDatum").value, 
+    uploadedImages
+  );
+};
+
+// Edit Case
 editForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentEditId) return;
-  
+
   const title = editForm.editTitle.value;
   const location = editForm.editLocation.value;
   const datum = editForm.editDatum.value;
   const tekst = editForm.editTekst.value;
-  
-  await updateDoc(doc(db, "Cases", currentEditId), { title, location, datum, tekst });
+
+  // Upload new images and merge with existing ones
+  const newImages = await uploadImages(uploadInput.files);
+  const updatedImages = [...uploadedImages, ...newImages];
+
+  await updateDoc(doc(db, "Cases", currentEditId), { title, location, datum, tekst, images: updatedImages });
   editPopup.style.display = "none";
   loadCases();
 });
 
-// Delete case
+// Delete Case
 window.deleteCase = async (id) => {
   await deleteDoc(doc(db, "Cases", id));
   loadCases();
 };
 
-// Close edit popup
+// Close Edit Popup
 document.getElementById("closePopup").addEventListener("click", () => {
   editPopup.style.display = "none";
 });
