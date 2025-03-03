@@ -7,6 +7,17 @@
   --black-2: black;
 }
 
+.holder-images-casepage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-casepage {
+  width: 200px;
+  border-radius: 10px;
+}
+
 .uploaded-image {
   position: relative;
   display: inline-block;
