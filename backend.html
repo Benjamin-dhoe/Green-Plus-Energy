@@ -49,10 +49,10 @@
               </a>
             </div>
         </div>
-    <div id="newcase" class="backendpart">
+    <div class="backendpart">
         <div class="heading" style="font-weight: 600">Over ons pagina teksten aanpassen</div>
         <div class="form-block w-form">
-          <form class="form" id="caseform">
+          <form class="form" id="overonsform">
             <input placeholder="" name="header1" class="inputfield area w-input" style="width: 100%; height: 40px" value="Maak kennis met GreenPlus Energy">
             <div class="spacer"></div>
             <textarea placeholder="" name="headertekst" class="inputfield area w-input" style="width: 100%; height: 200px">GreenPlus Energy is jouw partner voor duurzame energie. Wij leveren een totaaloplossing voor de installatie van zonnepanelen, thuisbatterijen en laadpalen.</textarea>
@@ -129,6 +129,43 @@ import {
   getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
 } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
 
+const tekstenCollection = collection(db, "Teksten");
+const tekstenDocRef = doc(tekstenCollection, "over-ons");
+
+const tekstenSnapshot = await getDoc(tekstenDocRef);
+if (tekstenSnapshot.exists()) {
+  const data = tekstenSnapshot.data();
+  document.querySelector('[name="header1"]').value = data.header1 || "";
+  document.querySelector('[name="headertekst"]').value = data.headertekst || "";
+  document.querySelector('[name="header2"]').value = data.header2 || "";
+  document.querySelector('[name="paragraaf1"]').value = data.paragraaf1 || "";
+  document.querySelector('[name="paragraaf2"]').value = data.paragraaf2 || "";
+  document.querySelector('[name="header3"]').value = data.header3 || "";
+  document.querySelector('[name="paragraaf3"]').value = data.paragraaf3 || "";
+}
+
+document.getElementById("overonsform").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const updatedData = {
+    header1: document.querySelector('[name="header1"]').value,
+    headertekst: document.querySelector('[name="headertekst"]').value,
+    header2: document.querySelector('[name="header2"]').value,
+    paragraaf1: document.querySelector('[name="paragraaf1"]').value,
+    paragraaf2: document.querySelector('[name="paragraaf2"]').value,
+    header3: document.querySelector('[name="header3"]').value,
+    paragraaf3: document.querySelector('[name="paragraaf3"]').value,
+  };
+
+  try {
+    await updateDoc(tekstenDocRef, updatedData);
+    alert("Teksten succesvol bijgewerkt!");
+  } catch (error) {
+    console.error("Error bij updaten:", error);
+    alert("Fout bij updaten van teksten!");
+  }
+});
+  
 const casesCollection = collection(db, "Cases");
 const storage = getStorage();
 const tableBody = document.querySelector(".table-systeem tbody");
@@ -138,7 +175,6 @@ const uploadInput = document.getElementById("upload");
 const loadingPopup = document.getElementById("loadingPopup");
 let uploadedImages = [];
 
-// Load Cases from Firestore
 async function loadCases() {
   loadingPopup.style.display = "flex";
   tableBody.innerHTML = "";
