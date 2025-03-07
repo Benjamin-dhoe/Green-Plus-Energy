@@ -1,3 +1,3 @@
 /backend  https://getadmindashboard-6i7pwpiz6q-uc.a.run.app?page=backend 200
 /case-edit  https://getadmindashboard-6i7pwpiz6q-uc.a.run.app?page=case-edit 200
-/detail-case/:id  https://getcasepage-6i7pwpiz6q-uc.a.run.app?id=:id 200
+/case-detail/:id  https://getcasepage-6i7pwpiz6q-uc.a.run.app?id=:id 200
