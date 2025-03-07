@@ -120,7 +120,7 @@ async function loadCases() {
     if (data.images && data.images.length > 0) {
       const caseElement = document.createElement("a");
       caseElement.classList.add("holder-case");
-	caseElement.href = `/case/${doc.id}`;
+	caseElement.href = `/case-detail/${doc.id}`;
 
       const imageElement = document.createElement("img");
       imageElement.classList.add("image-case");
