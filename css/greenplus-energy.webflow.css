@@ -7,6 +7,13 @@
   --black-2: black;
 }
 
+.codoolink {
+  color: #86c326;
+}
+.codoolink:hover {
+  color: white;
+}
+
 .holder-images-casepage {
   display: flex;
   flex-wrap: wrap;
